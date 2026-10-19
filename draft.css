@@ -1,0 +1,33 @@
+body{
+    padding: 0px;
+    margin: 0px;
+}
+
+#home{
+    background-image: url(images/moviebg.webp);
+    width:100vw;
+    height:100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#options{
+    text-align: center;
+}
+
+#movie,#manga,#anime,#food{
+    background-color: transparent;
+    color: white;
+    border: 0px;
+    font-size:15px;
+    transition: all 0.2s ease-in-out
+}
+
+#movie:hover,#manga:hover,#anime:hover,#food:hover{
+    color: #3ec1e2 ;
+    cursor: pointer;
+    transform: scale(1.2);
+    text-decoration-line: underline;
+    text-shadow: 0 0 5px #fff
+}
