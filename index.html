@@ -10,13 +10,24 @@
     </head>
     <body>
         <div id="home">
-            <div id="options">
-                <button id="movie">Movies</button>
-                <button id="manga">Manga</button>
-                <button id="anime">Anime</button>
-                <button id="food">Food</button>
-            </div>
 
+
+            <div id="home-draw">
+                <div id="player-info">
+                    Player 1: &nbsp;<input type="text" placeholder="Enter player 1's name" id="p1"> <br>
+                    Player 2: <input type="text" placeholder="Enter player 2's name" id="p2">
+                </div>
+                <div id="options">
+                <input type="radio" id="movie" onclick="moviefunc()" name="choose"><label for="movie">Movies</label></button>
+                <input type="radio" id="manga" onclick="mangafunc()" name="choose"><label for="manga">Manga</label></button>
+                <input type="radio" id="anime" onclick="animefunc()" name="choose"><label for="anime">Anime</label></button>
+                <input type="radio" id="food" onclick="foodfunc()" name="choose"><label for="food">Food</label></button>
+                    <br><br><br>
+                <button id="start-button" onclick="startfunc()"> Start</button>
+                </div>
+                <div id="check"></div>
+            </div>
+            
         </div>
         <script src="draft.js" async defer></script>
     </body>

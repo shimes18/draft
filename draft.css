@@ -1,6 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');   
+
 body{
     padding: 0px;
     margin: 0px;
+    color: whitesmoke;
+    font-family: montserrat;
 }
 
 #home{
@@ -10,10 +14,39 @@ body{
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #options{
     text-align: center;
+}
+
+#options label{
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+#options input:checked + label{
+    color: #3ec1e2 ;
+    cursor: pointer;
+    transform: scale(1.2);
+    text-decoration-line: underline;
+    text-shadow: 0 0 5px black;  
+}
+
+#options label:hover:not(:has(+ input:checked)){
+    color: #3ec1e2 ;
+    text-decoration-line: underline;
+    text-shadow: 0 0 5px black;  
+    transform: scale(1.2);
+}
+
+#options input{
+    display: none;
 }
 
 #movie,#manga,#anime,#food{
@@ -21,13 +54,52 @@ body{
     color: white;
     border: 0px;
     font-size:15px;
-    transition: all 0.2s ease-in-out
+    transition: all 0.2s ease-in-out;
 }
 
-#movie:hover,#manga:hover,#anime:hover,#food:hover{
+#start-button{
+    background-color: #3ec1e2 ;
+    color:whitesmoke;
+    border: 0px;
+    font-size:20px;
+    transition: all 0.2s ease-in-out;
+    border-radius: 10px;
+}
+
+
+
+
+#start-button:hover{
     color: #3ec1e2 ;
+    background-color: whitesmoke;
     cursor: pointer;
     transform: scale(1.2);
     text-decoration-line: underline;
-    text-shadow: 0 0 5px #fff
+    text-shadow: 0 0 5px #fff;
+}
+
+
+#home-draw{
+    background-color: rgba(19,19,19,0.5);
+    height: 50vh;
+    width: 60vw;
+    display: flexbox;
+    justify-content: space-between;
+}
+
+#player-info{
+    margin-top: 10vh;
+    margin-left: 5vw;
+    margin-bottom: 30px;
+}
+
+#player-info input{
+    background-color: white;
+    color: black;
+    border-radius: 10px;
+    border: 0px;
+    margin-right: 20px;
+    height: 30px;
+    margin-bottom: 15px;
+    width: 40vw;
 }
