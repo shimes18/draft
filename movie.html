@@ -7,6 +7,18 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="draft.css">
+        <style>
+            #player-info{
+                margin : 0;
+            }
+            #movie-pic{
+                height: 30vh;
+                width: 20vw;
+                background-size: cover;
+                background-position: center;
+                margin-left: 20vw;
+            }
+        </style>
     </head>
     <body>
         <div id="home">
@@ -15,12 +27,27 @@
                     <div id="p1"></div><div id="p1-pick1"></div> <div id="p1-pick2"></div> <div id="p1-pick3"></div> <div id="p1-pick4"></div> <div id="p1-pick5"></div> <br>
                     <div id="p2"></div><div id="p2-pick1"></div> <div id="p2-pick2"></div> <div id="p2-pick3"></div> <div id="p2-pick4"></div> <div id="p2-pick5"></div>
                 </div>
-                <button id="draw-button" onclick="drawfunc()"> Draw</button>
+                The movie you have to bid on is: <br>
+                <div id="movie-pic"></div>
+                <div id="movie-name"></div>
+                <button id="draw-button-movies" onclick="drawfunc()"> Draw</button> <br>
+                <input type="text" placeholder="Player 1's bid" id="p1bid">
+                <input type="text" placeholder="Player 2's bid" id="p2bid">
+                <button onclick="submit()">Submit bid</button>
                 </div>
-                <div id="check"></div>
             </div>
             
         </div>
-        <script src="draft.js" async defer></script>
+        <script>
+            const movie_array=["Dirty Dancing","12 Angry Men","Girl,Interrupted","The silence of the lambs", "The Good The Bad & The Ugly", "The Holdovers", "The Goodfellas", "Dead Poets Society", "Perfect Blue", "Spirited Away", "Babylon", "Starwars: Revenge of the Sith", "Mulholland drive", "The Conjuring", "Spider-Man: Across the Spider-Verse", "Eternal Sunshine of the spotless mind", "The Batman", "Titanic", "The Shining", "Avatar", "Blade Runner 2049"];
+            const points_array=[3.8,4.6,4.0,4.3,4.5,4.3,4.5,4.4,4.4,4.4,3.9,4.1,4.3,3.6,4.4,4.2,4.1,3.8,4.2,3.8,4.1];
+            const movie_image= ['images/movieposters/m0.webp','images/movieposters/m1.webp','images/movieposters/m2.webp','images/movieposters/m6.jpg','images/movieposters/m3.webp','images/movieposters/m4.jpg','images/movieposters/m7.jpg','images/movieposters/m5.jpg','images/movieposters/m8.jpg','images/movieposters/m9.jpg','images/movieposters/m10.jpg','images/movieposters/m11.jpg',,'images/movieposters/m12.jpg',,'images/movieposters/m13.jpg','images/movieposters/m14.jpg','images/movieposters/m15.jpg','images/movieposters/m16.jpg','images/movieposters/m17.jpg','images/movieposters/m18.jpg','images/movieposters/m19.jpg','images/movieposters/m20.jpg'];
+            document.getElementById("draw-button-movies").addEventListener("click",function drawfunc(){
+                var i = Math.floor(Math.random()*21);
+                document.getElementById("movie-name").innerHTML = movie_array[i];
+                document.getElementById("movie-pic").style.backgroundImage= `url('${movie_image[i]}')`;
+            });
+
+        </script>
     </body>
 </html>
