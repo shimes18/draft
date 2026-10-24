@@ -57,7 +57,7 @@ body{
     transition: all 0.2s ease-in-out;
 }
 
-#start-button, #draw-button-movies{
+#start-button{
     background-color: #3ec1e2 ;
     color:whitesmoke;
     border: 0px;
@@ -69,7 +69,7 @@ body{
 
 
 
-#start-button:hover, #draw-button-movies:hover{
+#start-button:hover{
     color: #3ec1e2 ;
     background-color: whitesmoke;
     cursor: pointer;
@@ -94,8 +94,8 @@ body{
 }
 
 #player-info input{
-    background-color: white;
-    color: black;
+    background-color: black;
+    color: whitesmoke;
     border-radius: 10px;
     border: 0px;
     margin-right: 20px;
