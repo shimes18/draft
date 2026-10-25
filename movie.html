@@ -30,7 +30,7 @@
             flex-direction: column;
         }
 
-        #draw-button-movies {
+        #start {
             text-align: center;
             height: 30px;
             width: 70px;
@@ -40,10 +40,6 @@
         #image {
             max-height: 50vh;
             max-width: 30vw;
-        }
-
-        #draw-button-movies {
-            text-align: center;
         }
 
         #movie-name {
@@ -77,6 +73,7 @@
             height: 30px;
             width: 130px;
             align-self: center;
+            display: none;
         }
 
         button {
@@ -96,6 +93,18 @@
             text-decoration-line: underline;
             text-shadow: 0 0 5px #fff;
         }
+
+        #player-info {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        #p1_info,
+        #p2_info {
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 </head>
 
@@ -103,25 +112,29 @@
     <div id="home">
         <div id="movie-draw">
             <div id="player-info">
-                <div id="p1"></div>
-                <div id="p1_pick0"></div>
-                <div id="p1_pick1"></div>
-                <div id="p1_pick2"></div>
-                <div id="p1_pick3"></div>
-                <div id="p1_pick4"></div> <br>
-                <div id="p2"></div>
-                <div id="p2_pick0"></div>
-                <div id="p2_pick1"></div>
-                <div id="p2_pick2"></div>
-                <div id="p2_pick3"></div>
-                <div id="p2_pick4"></div>
+                <div id="p1_info">
+                    <div id="p1"></div><br>
+                    <div id="p1_pick0"></div>
+                    <div id="p1_pick1"></div>
+                    <div id="p1_pick2"></div>
+                    <div id="p1_pick3"></div>
+                    <div id="p1_pick4"></div>
+                </div><br>
+                <div id="p2_info">
+                    <div id="p2"></div><br>
+                    <div id="p2_pick0"></div>
+                    <div id="p2_pick1"></div>
+                    <div id="p2_pick2"></div>
+                    <div id="p2_pick3"></div>
+                    <div id="p2_pick4"></div>
+                </div>
             </div>
             <div id="movie-name"></div>
             <div id="movie-pic"><img id="image"></div>
-            <button id="draw-button-movies" onclick="drawfunc()"> Draw</button>
+            <button id="start" onclick="drawfunc()">Start</button>
             <div id="bids">
-                <input type="number" placeholder="Player 1's bid" id="p1bid">
-                <input type="number" placeholder="Player 2's bid" id="p2bid">
+                <input type="number" placeholder="Player 1's bid" id="p1bid" min="0" oninput="validity.valid||(value='');">
+                <input type="number" placeholder="Player 2's bid" id="p2bid" min="0" oninput="validity.valid||(value='');">
             </div>
             <button id="submit" onclick="submit()">Submit bid</button>
             <div id="error"></div>
@@ -137,52 +150,70 @@
         var p2_money = 20;
         var a = 0;
         var b = 0;
+
+        const p1="Player 1";
+        const p2="Player 2"; 
+
         document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
         document.getElementById("p2").innerHTML = p2 + " Balance: " + p2_money;
-        document.getElementById("draw-button-movies").addEventListener("click", function drawfunc() {
-            var i = Math.floor(Math.random() * 21);
+
+        function drawfunc() {
+            i = Math.floor(Math.random() * 21);
             document.getElementById("movie-name").innerHTML = movie_array[i];
             document.getElementById("movie-name").style.display = "block";
             document.getElementById("movie-pic").style.display = "block";
             document.getElementById("image").src = `images/movieposters/${movie_array[i]}.webp`;
-            return i;
-        });
+            document.getElementById("start").style.display = 'none';
+            document.getElementById("submit").style.display="block";
+        };
 
-        const p1_pick=["string"],p1_pick_score=[1],p2_pick=["string"],p2_pick_score=[1];
+        const p1_pick = ["string"], p1_pick_score = [1], p2_pick = ["string"], p2_pick_score = [1];
 
         function submit() {
-            const p1bid = document.getElementById("p1bid").valueAsNumber;
-            const p2bid = document.getElementById("p2bid").valueAsNumber;
+            const p1bid = parseInt(document.getElementById("p1bid").valueAsNumber) || 0;
+            const p2bid = parseInt(document.getElementById("p2bid").valueAsNumber) || 0;
 
             if (p1bid <= p1_money && p2bid <= p2_money) {
 
-                if (p1bid > p2bid) {
+                if (p1bid > p2bid && a != 5) {
                     p1_money = p1_money - p1bid;
                     document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
                     alert(p1_money + " and " + p2_money);
                     p1_pick[a] = movie_array[i];
-                    p1_pick_score[a]= points_array[i];
+                    p1_pick_score[a] = points_array[i];
                     document.getElementById(`p1_pick${a}`).innerHTML = p1_pick[a];
                     a++;
+                    drawfunc();
                 }
 
-                else if (p2bid > p1bid) {
+                else if (a == 5 && p1bid > p2bid) {
+                    alert("Player 1 already has 5 draws , do not enter bid");
+                }
+
+                else if (p2bid > p1bid && b != 5) {
                     p2_money = p2_money - p2bid;
                     document.getElementById("p2").innerHTML = p2 + " Balance: " + p2_money;
-
-                    p2_pick[b]=movie_array[i];
-                    p2_pick_score[b]=movie_array[i];
-                    b++;
-                    alert(p2_pick[b] + " and " + p2_pick_score[b]);
                     alert(p1_money + " and " + p2_money);
+                    p2_pick[b] = movie_array[i];
+                    p2_pick_score[b] = points_array[i];
+                    document.getElementById(`p2_pick${b}`).innerHTML = p2_pick[b];
+                    b++;
+                    drawfunc();
                 }
-                drawfunc();
+
+                else if (b == 5 && p2bid > p1bid) {
+                    alert("Player 2 already has 5 draws , do not enter bid");
+                }
+
+                else if (p1bid == p2bid) {
+                    alert("equal bid, change the bid");
+                }
 
             }
             else if (p1bid > p1_money || p2bid > p2_money) {
                 alert("Entered bid exceeds balance");
             }
-            else{
+            else {
                 alert("Invalid bid");
             }
         }
