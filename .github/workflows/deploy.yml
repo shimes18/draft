@@ -1,0 +1,15 @@
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Inject
+        run: node scripts/inject.js
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+      - name: Deploy
+        run: npx gh-pages -d .   
