@@ -11,6 +11,7 @@
     <style>
         #player-info {
             margin: 0;
+            padding: 0;
         }
 
         #movie-pic {
@@ -21,10 +22,10 @@
             display: none;
         }
 
-        #movie-draw {
+        #movie-draw, #evaluationscreen {
             background-color: rgba(19, 19, 19, 0.5);
-            height: 95vh;
-            width: 95vw;
+            height: 100vh;
+            width: 100vw;
             justify-content: space-between;
             display: flex;
             flex-direction: column;
@@ -52,28 +53,28 @@
         #bids {
             display: flex;
             justify-content: space-between;
+            gap: 30px;
         }
 
         input {
             background-color: black;
             color: whitesmoke;
-            border-radius: 10px;
+            border-radius: 8px;
             border: 0px;
             height: 30px;
-            width: 45vw;
+            width: 50vw;
         }
 
         input::placeholder {
             text-align: center;
         }
 
-        #submit {
-            margin-top: -20px;
+        #submit,#evaluate {
             text-align: center;
             height: 30px;
             width: 130px;
-            align-self: center;
             display: none;
+            align-self: center;
         }
 
         button {
@@ -105,6 +106,10 @@
             display: flex;
             flex-direction: column;
         }
+
+        #evaluationscreen{
+
+        }
     </style>
 </head>
 
@@ -113,7 +118,7 @@
         <div id="movie-draw">
             <div id="player-info">
                 <div id="p1_info">
-                    <div id="p1"></div>div><br>
+                    <div id="p1"></div><br>
                     <div id="p1_pick0"></div>
                     <div id="p1_pick1"></div>
                     <div id="p1_pick2"></div>
@@ -127,7 +132,7 @@
                     <div id="p2_pick2"></div>
                     <div id="p2_pick3"></div>
                     <div id="p2_pick4"></div>
-                </div>check
+                </div>
             </div>
             <div id="movie-name"></div>
             <div id="movie-pic"><img id="image"></div>
@@ -137,7 +142,25 @@
                 <input type="number" placeholder="Player 2's bid" id="p2bid" min="0" oninput="validity.valid||(value='');">
             </div>
             <button id="submit" onclick="submit()">Submit bid</button>
+            <button id="evaluate" onclick="evaluationfunc()">Evaluate</button>
             <div id="error"></div>
+
+
+        </div>
+
+            <!--  FOR EVALUATION SCREEN  -->
+
+        <div id="evaluationscreen">
+            <div id="player1eval">
+            <div id="player1movie"></div>
+            <img id="player1poster"></div>
+            <div id="player1score"></div>
+            </div>
+            <div id="player2eval">
+            <div id="player2movie"></div>
+            <img id="player2poster"></div>
+            <div id="player2score"></div>
+            </div>
         </div>
     </div>
 
@@ -155,12 +178,17 @@
         var a = 0;
         var b = 0;
 
+        document.getElementById("evaluate").style.display = "none";
+
+
+
+
         const p1="Player 1";
         const p2="Player 2"; 
 
         async function load() {
-            for (let page=1;page<=3;page++){
-                const res = await fetch(`https://api.themoviedb.org/3/movie?api_key=${API_KEY}&page=${page}`);
+            for (let page=1;page<=15;page++){
+                const res = await fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=vote_count.desc&page=${page}`);
                 const data= await res.json();
                 data.results.forEach(function func(m){
                     if (m.poster_path){
@@ -170,8 +198,11 @@
                     }
                 });
             }
-        }
+            }
+
         load();
+
+        console.log("Total movies loadaed:", movie_array.length)
         document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
         document.getElementById("p2").innerHTML = p2 + " Balance: " + p2_money;
 
@@ -185,7 +216,7 @@
             document.getElementById("submit").style.display="block";
         };
 
-        const p1_pick = ["string"], p1_pick_score = [1], p2_pick = ["string"], p2_pick_score = [1];
+        const p1_pick = ["string"], p1_pick_score = [1], p2_pick = ["string"], p2_pick_score = [1], p1_pick_poster=[],p2_pick_poster=[];
 
         function submit() {
             const p1bid = parseInt(document.getElementById("p1bid").valueAsNumber) || 0;
@@ -196,8 +227,8 @@
                 if (p1bid > p2bid && a != 5) {
                     p1_money = p1_money - p1bid;
                     document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
-                    alert(p1_money + " and " + p2_money);
                     p1_pick[a] = movie_array[i];
+                    p2_pick_poster[a] = poster_array[i]
                     p1_pick_score[a] = points_array[i];
                     document.getElementById(`p1_pick${a}`).innerHTML = p1_pick[a];
                     a++;
@@ -211,9 +242,9 @@
                 else if (p2bid > p1bid && b != 5) {
                     p2_money = p2_money - p2bid;
                     document.getElementById("p2").innerHTML = p2 + " Balance: " + p2_money;
-                    alert(p1_money + " and " + p2_money);
                     p2_pick[b] = movie_array[i];
                     p2_pick_score[b] = points_array[i];
+                    p2_pick_poster[b] = poster_array[i]
                     document.getElementById(`p2_pick${b}`).innerHTML = p2_pick[b];
                     b++;
                     drawfunc();
@@ -231,10 +262,26 @@
             else if (p1bid > p1_money || p2bid > p2_money) {
                 alert("Entered bid exceeds balance");
             }
+            else if(a==5 && b==5){
+                document.getElementById("evaluate").style.visibility = "visible";
+                document.getElementById("submit").style.display = "none";
+            }
             else {
                 alert("Invalid bid");
             }
         }
+        
+        var l=0;
+
+        function evaluationfunc(){
+            document.getElementById("movie-draw").style.display="none";
+            document.getElementById("evaluationscreen").style.display="block";
+
+            document.getElementById("player1movie").innerHTML= p1_pick[l];
+            document.getElementById("player1poster").src = p1_pick_poster[l];
+            document.getElementById("player1score").innerHTML = p1_pick_score[l];
+        }
+
     </script>
 </body>
 
