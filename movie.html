@@ -160,7 +160,7 @@
 
         async function load() {
             for (let page=1;page<=3;page++){
-                const res = await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&page=${page}`);
+                const res = await fetch(`https://api.themoviedb.org/3/movie?api_key=${API_KEY}&page=${page}`);
                 const data= await res.json();
                 data.results.forEach(function func(m){
                     if (m.poster_path){
