@@ -160,6 +160,31 @@
         #winner,#totalscore{
             text-align: center;
         }
+
+        #winner{
+            color:green;
+            justify-content: center;
+        }
+
+        #round{
+            text-align: center;
+        }
+
+        #stuck{
+            display:none;
+        }
+
+        #fscore1,#fscore2{
+            text-align: center;
+        }
+        #ftotalscores{
+            text-align: center;
+        }
+        #winner{
+            text-align: center;
+            font-weight: bolder;
+            text-decoration :solid
+        }
     </style>
 </head>
 
@@ -192,6 +217,7 @@
                 <input type="number" placeholder="Player 2's bid" id="p2bid" min="0" oninput="validity.valid||(value='');">
             </div>
             <button id="submit" onclick="submit()">Submit bid</button>
+            <button id="stuck" onclick="stuck()"> Stuck</button>
             <button id="evaluate" onclick="evaluationfunc()">Evaluate</button>
             <div id="error"></div>
 
@@ -201,6 +227,7 @@
             <!--  FOR EVALUATION SCREEN  -->
 
         <div id="evaluationscreen">
+            <div id="round"></div>
             <div id="playereval">
             <div id="player1eval">
             <img id="player1poster">
@@ -223,14 +250,10 @@
             </div>
         </div>
         <div id="finalscreen">
-            <div id="score1"></div>
-            <div id="score2"></div>
-            <div id="totalscore"></div>
+            <div id="fscore1"></div><br>
+            <div id="fscore2"></div><br>
+            <div id="ftotalscores"></div><br><br><br><br>
             <div id="winner"></div>
-            <div id="finallist">
-                <div id="player1final"></div>
-                <div id="player2final"></div>
-            </div>
         </div>
     </div>
 
@@ -274,6 +297,11 @@
             
         function drawfunc() {
             i = Math.floor(Math.random() * movie_array.length);
+            document.getElementById("p1bid").value="";
+            document.getElementById("p2bid").value="";
+            var startingplayer = Math.floor(Math.random() * 2) + 1 ;
+            document.getElementById(`p${startingplayer}bid`).value = 1;
+            document.getElementById(`p${startingplayer}bid`).min = 1;
             document.getElementById("movie-name").innerHTML = movie_array[i];
             document.getElementById("movie-name").style.display = "block";
             document.getElementById("movie-pic").style.display = "block";
@@ -282,6 +310,8 @@
             document.getElementById("submit").style.display="block";
             document.getElementById("p1bid").style.display="block";
             document.getElementById("p2bid").style.display="block";
+            document.getElementById("stuck").style.display="block";
+
         };
 
         const p1_pick = ["string"], p1_pick_score = [1], p2_pick = ["string"], p2_pick_score = [1], p1_pick_poster=[],p2_pick_poster=[];
@@ -303,8 +333,11 @@
                     drawfunc();
                 }
 
-                else if (a == 5 && p1bid > p2bid) {
-                    alert("Player 1 already has 5 draws , do not enter bid");
+                else if (a == 5 && b!=5) {
+                    document.getElementById("p1bid").disabled=true;
+                    document.getElementById("p2bid").value = 1;
+                    document.getElementById("p1bid").value = 0;
+                    p2_money=1000;
                     evaluationfunc();
                 }
 
@@ -319,13 +352,19 @@
                     drawfunc();
                 }
 
-                else if (b == 5 && p2bid > p1bid) {
-                    alert("Player 2 already has 5 draws , do not enter bid");
+                else if (b == 5 && a!=5) {
+                    document.getElementById("p2bid").disabled=true;
+                    document.getElementById("p2bid").value = 0;
+                    document.getElementById("p1bid").value=1;
+                    p1_money=1000;
                     evaluationfunc();
                 }
 
                 else if (p1bid == p2bid) {
                     alert("equal bid, change the bid");
+                }
+                else if (a==5 && b==5){
+                    evaluationfunc();
                 }
 
             }
@@ -360,7 +399,9 @@
             points1 = p1_pick_score[l] + points1;
             points2 = p2_pick_score[l] + points2;
 
+            var round=l+1;
             document.getElementById("totalscore").innerHTML = "Player 1's total rating is : " + points1 + "   Player 2's total rating is : " +points2;
+            document.getElementById("round").innerHTML = "ROUND " + round ;
 
 
 
@@ -371,6 +412,7 @@
                 document.getElementById("player1poster").style.boxShadow= "0 0 40px green";
                 document.getElementById("player2poster").style.boxShadow= "0 0 0 green";
             }
+
             else if (p1_pick_score[l]<p2_pick_score[l]){
                 document.getElementById("player2score").style.color= "green";
                 document.getElementById("player1score").style.color= "whitesmoke";
@@ -378,6 +420,7 @@
                 document.getElementById("player1poster").style.boxShadow= "0 0 0 green";
                 score2++;
             }
+
             else{
                 document.getElementById("player2score").style.color= "whitesmoke";
                 document.getElementById("player1score").style.color= "whitesmoke";
@@ -414,15 +457,16 @@
 
         function showresults(){
             document.getElementById("finalscreen").style.display="flex";
+            document.getElementById("finalscreen").style.flexDirection="column";
             document.getElementById("evaluationscreen").style.display="none";
 
-            document.getElementById("score1").innerHTML = "Players 1's score is: " + score1;
-            document.getElementById("score2").innerHTML = "Players 2's score is: " + score2;
+            document.getElementById("fscore1").innerHTML = "Players 1's score is: " + score1;
+            document.getElementById("fscore2").innerHTML = " Players 2's score is: " + score2;
 
             calculated1 = score1*5 + points1*5;
             calculated2 = score2*5 + points2*5;
 
-            document.getElementById("totalscores").innerHTML = "Players 1's total rating is: " + points1 + "Players 2's total rating is: " + points2;
+            document.getElementById("ftotalscores").innerHTML = "Players 1's total rating is: " + points1 + "  Players 2's total rating is: " + points2;
             if (calculated1>calculated2){
                 document.getElementById("winner").innerHTML = "Player 1 WINS!!!!";
             }
@@ -430,6 +474,14 @@
                 document.getElementById("winner").innerHTML = "Player 2 WINS!!!!";
             }
 
+
+        }
+
+        function stuck(){
+            p1_money+=10;
+            p2_money+=10;
+            document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
+            document.getElementById("p2").innerHTML = p2 + " Balance: " + p2_money;
 
         }
 
