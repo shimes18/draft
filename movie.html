@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <script src="config.js"></script>
+    <script src=".filler/config.js"></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title></title>
@@ -70,6 +70,10 @@
             text-align: center;
         }
 
+        #p1bid , #p2bid{
+            display: none;
+        }
+
         #submit,#evaluate {
             text-align: center;
             height: 30px;
@@ -79,20 +83,23 @@
         }
 
         button {
-            background-color: #3ec1e2;
+            background-color: black;
             color: whitesmoke;
             border: 0px;
             font-size: 20px;
+            font-weight: 0;
             transition: all 0.2s ease-in-out;
             border-radius: 10px;
+            height: 30px;
+            width: 130px;
+            align-self: center;
+            text-align: center;
         }
 
         button:hover {
-            color: #3ec1e2;
+            color: black;
             background-color: whitesmoke;
             cursor: pointer;
-            transform: scale(1.2);
-            text-decoration-line: underline;
             text-shadow: 0 0 5px #fff;
         }
 
@@ -109,7 +116,49 @@
         }
 
         #evaluationscreen{
+            display : none ;
+            background-color: rgb(19, 17, 17);
+            height: 92vh;
+            width: 85vw;
+            border-radius: 30px;
+        }
 
+        #evaluationscreen img{
+            height: 360px;
+            width: 240px;
+        }
+
+        #playereval{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #evalbuttons{
+            gap:5px;
+            display: flex;
+            flex-direction: row ;
+            margin-top: 0;
+            align-items: center;
+        }
+
+        #finalscreen{
+            display:none;
+            background-color: rgb(19, 17, 17);
+            height: 92vh;
+            width: 85vw;
+            border-radius: 30px;
+        }
+
+        #results{
+            display: none;
+            width: fit-content;
+        }
+
+        #winner,#totalscore{
+            text-align: center;
         }
     </style>
 </head>
@@ -152,15 +201,35 @@
             <!--  FOR EVALUATION SCREEN  -->
 
         <div id="evaluationscreen">
+            <div id="playereval">
             <div id="player1eval">
+            <img id="player1poster">
             <div id="player1movie"></div>
-            <img id="player1poster"></div>
             <div id="player1score"></div>
             </div>
             <div id="player2eval">
+            <img id="player2poster">
             <div id="player2movie"></div>
-            <img id="player2poster"></div>
             <div id="player2score"></div>
+            </div>
+            </div>
+            <div id="score1"></div>
+            <div id="score2"></div>
+            <div id="totalscore"></div>
+            <div id="evalbuttons">
+            <button id="nextevaluation" onclick="nexteval()">Next Round</button>
+            <button id="skipevaluation" onclick="skipeval()">Skip </button>
+            <button id="results" onclick="showresults()">Show Results</button>
+            </div>
+        </div>
+        <div id="finalscreen">
+            <div id="score1"></div>
+            <div id="score2"></div>
+            <div id="totalscore"></div>
+            <div id="winner"></div>
+            <div id="finallist">
+                <div id="player1final"></div>
+                <div id="player2final"></div>
             </div>
         </div>
     </div>
@@ -179,11 +248,7 @@
         var a = 0;
         var b = 0;
 
-        document.getElementById("evaluate").style.display = "none";
-
-
-
-
+        document.getElementById("evaluationscreen").style.display = "none";
         const p1="Player 1";
         const p2="Player 2"; 
 
@@ -201,12 +266,12 @@
             }
             }
 
-        load();
+            load();
 
-        console.log("Total movies loadaed:", movie_array.length)
-        document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
-        document.getElementById("p2").innerHTML = p2 + " Balance: " + p2_money;
-
+            console.log("Total movies loadaed:", movie_array.length)
+            document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
+            document.getElementById("p2").innerHTML = p2 + " Balance: " + p2_money;
+            
         function drawfunc() {
             i = Math.floor(Math.random() * movie_array.length);
             document.getElementById("movie-name").innerHTML = movie_array[i];
@@ -215,6 +280,8 @@
             document.getElementById("image").src = poster_array[i];
             document.getElementById("start").style.display = 'none';
             document.getElementById("submit").style.display="block";
+            document.getElementById("p1bid").style.display="block";
+            document.getElementById("p2bid").style.display="block";
         };
 
         const p1_pick = ["string"], p1_pick_score = [1], p2_pick = ["string"], p2_pick_score = [1], p1_pick_poster=[],p2_pick_poster=[];
@@ -229,7 +296,7 @@
                     p1_money = p1_money - p1bid;
                     document.getElementById("p1").innerHTML = p1 + " Balance: " + p1_money;
                     p1_pick[a] = movie_array[i];
-                    p2_pick_poster[a] = poster_array[i]
+                    p1_pick_poster[a] = poster_array[i]
                     p1_pick_score[a] = points_array[i];
                     document.getElementById(`p1_pick${a}`).innerHTML = p1_pick[a];
                     a++;
@@ -238,6 +305,7 @@
 
                 else if (a == 5 && p1bid > p2bid) {
                     alert("Player 1 already has 5 draws , do not enter bid");
+                    evaluationfunc();
                 }
 
                 else if (p2bid > p1bid && b != 5) {
@@ -253,6 +321,7 @@
 
                 else if (b == 5 && p2bid > p1bid) {
                     alert("Player 2 already has 5 draws , do not enter bid");
+                    evaluationfunc();
                 }
 
                 else if (p1bid == p2bid) {
@@ -263,24 +332,105 @@
             else if (p1bid > p1_money || p2bid > p2_money) {
                 alert("Entered bid exceeds balance");
             }
-            else if(a==5 && b==5){
-                document.getElementById("evaluate").style.visibility = "visible";
-                document.getElementById("submit").style.display = "none";
-            }
             else {
                 alert("Invalid bid");
             }
         }
         
         var l=0;
+        var score1=0,score2=0,points1=0,points2=0,calculated1=0,calculated2=0;
 
         function evaluationfunc(){
+         if(a==5 && b==5){
             document.getElementById("movie-draw").style.display="none";
-            document.getElementById("evaluationscreen").style.display="block";
+            document.getElementById("evaluationscreen").style.display="flex";
+            document.getElementById("evaluationscreen").style.flexDirection="column";
+
+            
+
 
             document.getElementById("player1movie").innerHTML= p1_pick[l];
             document.getElementById("player1poster").src = p1_pick_poster[l];
             document.getElementById("player1score").innerHTML = p1_pick_score[l];
+
+            document.getElementById("player2movie").innerHTML= p2_pick[l];
+            document.getElementById("player2poster").src = p2_pick_poster[l];
+            document.getElementById("player2score").innerHTML = p2_pick_score[l];
+            
+            points1 = p1_pick_score[l] + points1;
+            points2 = p2_pick_score[l] + points2;
+
+            document.getElementById("totalscore").innerHTML = "Player 1's total rating is : " + points1 + "   Player 2's total rating is : " +points2;
+
+
+
+            if (p1_pick_score[l]>p2_pick_score[l]){
+                score1++;
+                document.getElementById("player1score").style.color= "green";
+                document.getElementById("player2score").style.color= "whitesmoke";
+                document.getElementById("player1poster").style.boxShadow= "0 0 40px green";
+                document.getElementById("player2poster").style.boxShadow= "0 0 0 green";
+            }
+            else if (p1_pick_score[l]<p2_pick_score[l]){
+                document.getElementById("player2score").style.color= "green";
+                document.getElementById("player1score").style.color= "whitesmoke";
+                document.getElementById("player2poster").style.boxShadow= "0 0 40px green";
+                document.getElementById("player1poster").style.boxShadow= "0 0 0 green";
+                score2++;
+            }
+            else{
+                document.getElementById("player2score").style.color= "whitesmoke";
+                document.getElementById("player1score").style.color= "whitesmoke";
+                document.getElementById("player2poster").style.boxShadow= "0 0 0 green";
+                document.getElementById("player1poster").style.boxShadow= "0 0 0 green";
+            }
+            
+            document.getElementById("score1").innerHTML= "Player 1 : " + score1;
+            document.getElementById("score2").innerHTML= "Player 2 : " + score2;
+            l++;
+            verdictfunc();
+         }
+        }
+
+        function nexteval(){
+        if (l<=4){
+            evaluationfunc();
+            verdictfunc();
+        }
+        }
+
+        function skipeval(){
+            for(l=l;l<5;l++){
+                evaluationfunc();
+                verdictfunc();
+            }
+        }
+
+        function verdictfunc(){
+            if (l==5){
+                document.getElementById("results").style.display="block";
+            }
+        }
+
+        function showresults(){
+            document.getElementById("finalscreen").style.display="flex";
+            document.getElementById("evaluationscreen").style.display="none";
+
+            document.getElementById("score1").innerHTML = "Players 1's score is: " + score1;
+            document.getElementById("score2").innerHTML = "Players 2's score is: " + score2;
+
+            calculated1 = score1*5 + points1*5;
+            calculated2 = score2*5 + points2*5;
+
+            document.getElementById("totalscores").innerHTML = "Players 1's total rating is: " + points1 + "Players 2's total rating is: " + points2;
+            if (calculated1>calculated2){
+                document.getElementById("winner").innerHTML = "Player 1 WINS!!!!";
+            }
+            else if (calculated2>calculated1){
+                document.getElementById("winner").innerHTML = "Player 2 WINS!!!!";
+            }
+
+
         }
 
     </script>
