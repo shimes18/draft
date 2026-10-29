@@ -13,6 +13,8 @@ document.getElementById("start-button").addEventListener("click", function abcd(
     const p1=document.getElementById("p1").value;
     const p2=document.getElementById("p2").value;
 
+    localStorage.setItem("p1o",p1);
+    localStorage.setItem("p2o",p2);
 
 
     const mode = document.querySelector('input[name="choose"]:checked').id;
