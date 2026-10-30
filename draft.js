@@ -21,18 +21,18 @@ document.getElementById("start-button").addEventListener("click", function abcd(
     document.getElementById("check").innerHTML= "player 1 is: " + p1 + " and player 2 is: " + p2 + "mode selecetd is : " + mode ;
 
     if (mode=="movie"){
-        window.location.href="movie.html";
+        window.location.href="https://shimes18.github.io/draft/movie.html";
 
     }
 
     else if(mode=="manga"){
-        window.location.href="manga.html"
+        window.location.href="https://shimes18.github.io/draft/manga.html"
     }
     else if (mode=="anime"){
-        window.location.href="anime.html"
+        window.location.href="https://shimes18.github.io/draft/anime.html"
     }
     else{
-        window.location.href="tv.html"
+        window.location.href="https://shimes18.github.io/draft/tv.html"
     }
 });
 
