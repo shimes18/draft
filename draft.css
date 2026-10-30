@@ -38,6 +38,10 @@ body{
     text-shadow: 0 0 5px black;  
 }
 
+#manga:checked ~ #home{
+    background-image: url(images/mangabg.jpg);
+}
+
 #options label:hover:not(:has(+ input:checked)){
     color: #3ec1e2 ;
     text-decoration-line: underline;

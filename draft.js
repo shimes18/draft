@@ -3,7 +3,7 @@
 var moviebut = document.getElementById("movie");
 var mangabut = document.getElementById("manga");
 var animebut= document.getElementById("anime");
-var foodbut= document.getElementById("food");
+var foodbut= document.getElementById("tv");
 
 
 document.getElementById("start-button").style.visibility= "visible";
@@ -32,7 +32,29 @@ document.getElementById("start-button").addEventListener("click", function abcd(
         window.location.href="anime.html"
     }
     else{
-        window.location.href="food.html"
+        window.location.href="tv.html"
     }
 });
 
+document.getElementById("manga").addEventListener("change", function(){
+    if (this.checked){
+        document.getElementById("home").style.backgroundImage = "url('images/mangabg.jpg')"
+    }
+})
+document.getElementById("tv").addEventListener("change", function(){
+    if (this.checked){
+        document.getElementById("home").style.backgroundImage = "url('images/tvbg.jpg')"
+    }
+})
+document.getElementById("anime").addEventListener("change", function(){
+    if (this.checked){
+        document.getElementById("home").style.backgroundImage = "url('images/animebg.jpg')"
+    }
+})
+
+
+document.getElementById("movie").addEventListener("change", function(){
+    if (this.checked){
+        document.getElementById("home").style.backgroundImage = "url('images/moviebg.webp')"
+    }
+})
