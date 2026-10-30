@@ -18,7 +18,6 @@ document.getElementById("start-button").addEventListener("click", function abcd(
 
 
     const mode = document.querySelector('input[name="choose"]:checked').id;
-    document.getElementById("check").innerHTML= "player 1 is: " + p1 + " and player 2 is: " + p2 + "mode selecetd is : " + mode ;
 
     if (mode=="movie"){
         window.location.href="https://shimes18.github.io/draft/movie.html";
